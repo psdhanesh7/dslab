@@ -1,5 +1,6 @@
 #include<stdio.h>
 #define max 100
+#define True 1
 int partition(int ar[],int start,int end)
 {
 	int pivot=ar[end],pindex=start,i,temp;
@@ -128,7 +129,7 @@ void selectionsort(int ar[],int n)
 int menu()
 {
 	int choice;
-	printf("\n_____MENU_____\n1.Bubblesort\n2.Selection sort\n3.Quick sort\n4.Merge sort\n5.Insertion sort\n6.Exit");
+	printf("\n_____MENU_____\n1.Bubblesort\n2.Selection sort\n3.Insertion sort\n4.Merge sort\n5.Quick sort\n6.Exit");
 	printf("\nEnter your choice:  ");
 	scanf("%d",&choice);
 	return choice;
@@ -136,38 +137,46 @@ int menu()
 }
 void main()
 {
-	int ar[max],n,i,choice;
+	int ar[max],a[max],n,i,choice;
 	printf("Enter the number of elements in the array:");
 	scanf("%d",&n);
 	printf("Enter the elements of the array:\n");
 	for(i=0;i<n;i++)
-		scanf("%d",&ar[i]);
-	printf("Entered array is :\n");
-	for(i=0;i<n;i++)
-		printf("%d\t",ar[i]);
-	choice=menu();
-	switch(choice)
-	{
-		case 1: bubblesort(ar,n);
-				break;
-		case 2: selectionsort(ar,n);
-				break;
-		case 3: quicksort(ar,0,n-1);
-				break;
-		case 4: mergesort(ar,n);
-				break;
-		case 5: insertionsort(ar,n);
-				break;
-		case 6: goto end;
-
-		default:printf("Invalid Entry!!");
-
-	}
+		scanf("%d",&a[i]);
 	
-	printf("\nSorted array is :\n");
-	for(i=0;i<n;i++)
-		printf("%d\t",ar[i]);
-	printf("\n");
+	while(True)
+	{
+		choice=menu();
+		if(choice=6)
+			goto end;
+		for(i=0;i<n;i++)
+			ar[i]=a[i];
+		printf("Entered array is :\n");
+		for(i=0;i<n;i++)
+			printf("%d\t",ar[i]);
+		switch(choice)
+		{
+			case 1: bubblesort(ar,n);
+					break;
+			case 2: selectionsort(ar,n);
+					break;
+			case 3: insertionsort(ar,n);
+					break;
+			case 4: mergesort(ar,n);
+					break;
+			case 5: quicksort(ar,0,n-1);
+					break;
+			case 6: goto end;
+
+			default:printf("Invalid Entry!!");
+
+		}
+		
+		printf("\nSorted array is :\n");
+		for(i=0;i<n;i++)
+			printf("%d\t",ar[i]);
+		printf("\n");
+	}
 	end:;
 
 }
