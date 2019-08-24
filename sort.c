@@ -46,17 +46,9 @@ void merge(int a[],int b[],int c[],int n1,int n2)
 	while(i<n1 && j<n2)
 	{
 		if(a[i]<=b[j])
-		{
-			c[k]=a[i];
-			i++;
-			k++;
-		}
+			c[k++]=a[i++];
 		else if(b[j]<a[i])
-		{
-			c[k]=b[j];
-			k++;
-			j++;
-		}
+			c[k++]=b[j++];
 		else
 		{
 			c[k]=c[k+1]=a[i];
@@ -147,7 +139,7 @@ void main()
 	while(True)
 	{
 		choice=menu();
-		if(choice=6)
+		if(choice==6)
 			goto end;
 		for(i=0;i<n;i++)
 			ar[i]=a[i];
