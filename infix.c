@@ -38,6 +38,11 @@ int isempty()
 	return 0;
 }
 
+int IsNumericDigit(char c)
+{
+	return c>='0' && c<='9' ? 1 : 0;
+}
+
 int isoperand(char c)
 {
 	return (c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') ? 1 : 0 ;
@@ -84,9 +89,11 @@ int hashigherprecedence(char c1,char c2)
 }
 void infixtopostfix(char exp[],char result[])
 {
-	int i,length=strlen(exp),index=0;
+	int i,length=strlen(exp),index=0,operand;
 	for(i=0;i<length;i++)
 	{
+		if(exp[i] == ' ' || exp[i] == ',')
+			continue;
 		if(exp[i]=='(')
 			push(exp[i]);
 		else if(exp[i]==')')
@@ -101,6 +108,19 @@ void infixtopostfix(char exp[],char result[])
 		}
 		else if(isoperand(exp[i]))
 		{
+			// if(IsNumericDigit(exp[i]))
+			// {
+			// 	operand = 0;
+			// 	while(IsNumericDigit(exp[i]))
+			// 	{
+			// 		operand = operand * 10 + (exp[i] - '0');
+			// 		i++;
+			// 	}
+			// 	i--;
+			// 	result=operand;
+			// }
+			// else
+
 			result[index++]=exp[i];
 		}
 		else if(isoperator(exp[i]))
