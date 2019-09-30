@@ -90,7 +90,10 @@ int hashigherprecedence(char c1,char c2)
 void infixtopostfix(char exp[],char result[])
 {
 	int i,length=strlen(exp),index=0,operand;
-	for(i=0;i<length;i++)
+
+	result[index++]=exp[i];
+
+	for(i=1;i<length;i++)
 	{
 		if(exp[i] == ' ' || exp[i] == ',')
 			continue;
@@ -108,23 +111,12 @@ void infixtopostfix(char exp[],char result[])
 		}
 		else if(isoperand(exp[i]))
 		{
-			// if(IsNumericDigit(exp[i]))
-			// {
-			// 	operand = 0;
-			// 	while(IsNumericDigit(exp[i]))
-			// 	{
-			// 		operand = operand * 10 + (exp[i] - '0');
-			// 		i++;
-			// 	}
-			// 	i--;
-			// 	result=operand;
-			// }
-			// else
-
 			result[index++]=exp[i];
 		}
 		else if(isoperator(exp[i]))
 		{
+			if(IsNumericDigit(exp[i-1]))
+				result[index++] = ' ';
 			while(!isempty() && hashigherprecedence(TOP(),exp[i]) && s[top]!='(')
 			{
 				result[index++]=TOP();
