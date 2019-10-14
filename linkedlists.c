@@ -46,35 +46,7 @@ void insertionAtTail(int value)
 
 void insertionAtAPostion(int pos, int value)
 {
-		// if(header == NULL)
-		// {
-		// 	printf("List empty!!\n");
-		// }
-		// else
-		// {
-		// 	struct node *prev, *ptr, *new;
-		// 	int i;
-
-		// 	prev = ptr = header;
-
-		// 	for(i = 1; i < pos && ptr->link != NULL; i++)
-		// 	{
-		// 		prev = ptr;
-		// 		ptr = ptr->link;
-		// 	}
-
-		// 	if(i != n-1)
-		// 		printf("Invalid position\n");
-		// 	else
-		// 	{
-		// 		new = (struct node *) malloc(sizeof(struct node));
-
-		// 		new->data = value;
-		// 		prev->link = new;
-		// 		new->link = ptr;
-		// 	}
-
-		}
+		
 }
 
 void insertionBeforeAData(int data, int value)
