@@ -25,6 +25,8 @@ void insertionAtTail(int value)
 
 	new = (struct node*) malloc(sizeof(struct node));
 
+	new->data = value;
+
 	if(header == NULL)
 	{
 		new->link = header;
@@ -34,7 +36,7 @@ void insertionAtTail(int value)
 	{
 		ptr = header;
 
-		while(ptr->link != header)
+		while(ptr->link != NULL)
 		{
 			ptr = ptr->link;
 		}
@@ -46,14 +48,45 @@ void insertionAtTail(int value)
 
 void insertionAtAPostion(int pos, int value)
 {
-		
+		int currentPos = 1;
+		struct node *new, *ptr = header;
+
+		if(pos == 1)
+		{
+			new = (struct node *) malloc(sizeof(struct node*));
+
+			new->data = value;	
+			new->link = header;
+			header = new;
+		}
+		else
+		{
+			while(currentPos < pos-1 && ptr != NULL)
+			{
+				ptr = ptr->link;
+				currentPos++;
+			}
+
+			if(ptr == NULL)
+
+				printf("Specified position not valid!!\n");
+
+			else
+			{
+				new = (struct node*) malloc(sizeof(struct node));
+
+				new->data = value;
+				new->link = ptr->link;
+				ptr->link = new;
+			}
+		}
 }
 
 void insertionBeforeAData(int data, int value)
 {
 	if(header == NULL)
 
-		printf("List is empty!!Data not found\n");
+		printf("List is empty!!\n");
 
 	else
 	{
@@ -65,10 +98,12 @@ void insertionBeforeAData(int data, int value)
 			ptr = ptr->link;
 		}
 		if(ptr->data != data)
-			printf("Data not found\n");
+			printf("Data not found!!\n");
 		else
 		{
 				new = (struct node*) malloc(sizeof(struct node));
+
+				new->data = value;
 
 				if(ptr == pc)
 				{
@@ -85,7 +120,7 @@ void insertionBeforeAData(int data, int value)
 }
 
 
-void deletetionAtHead()
+void deletionAtHead()
 {
 	if(header == NULL)
 
@@ -101,7 +136,7 @@ void deletetionAtHead()
 	}
 }
 
-void deletetionAtTail()
+void deletionAtTail()
 {
 	if(header == NULL)
 	{
@@ -130,13 +165,40 @@ void deletetionAtTail()
 	}
 }
 
-void deletetionAtAPosition()
+void deletionAtAPosition(int pos)
 {
+	int currentPos = 1;
+	struct node *temp, *ptr = header;
 
+	if(pos == -1)
+	{
+		temp = header;
+		header = header->link;
+
+		free(temp);
+	}
+	else
+	{
+		while(currentPos < pos-1 && ptr != NULL)
+		{
+			ptr = ptr->link;
+			currentPos++;
+		}
+
+		if(ptr == NULL)
+			printf("Specified position not valid !!\n");
+		else
+		{
+			temp = ptr->link;
+			ptr->link = ptr->link->link;
+
+			free(temp);
+		}
+	}
 
 }
 
-void deletetionBeforeAData(int data)
+void deletionBeforeAData(int data)
 {
 	if(header == NULL)
 	{
@@ -160,11 +222,11 @@ void deletetionBeforeAData(int data)
 		else
 		{
 			if(ptr == header)
-				printf("No node before the specified node\n");
+				printf("No node before the specified node!!\n");
 			else if(pv1 == header)
 			{
 				header = ptr;
-				free(ptr);
+				free(pv1);
 			}
 			else
 			{
@@ -181,7 +243,7 @@ void display()
 
 	if(header == NULL)
 
-		printf("List is empty\n");
+		printf("List is empty!!\n");
 
 	else
 	{
@@ -206,50 +268,52 @@ void main()
 
 	while(1)
 	{
-		printf("\n____MENU____\n1. Insertion at head\n2. Deletion at head\n3. Insertion at tail\n4. Deletion at tail\n5. Insertion at a position\n6. Deletion at a position\n7. Insertion before a data\n8. Deletion before a data\n9. Display\n10.Exit\n");
+		printf("\n____MENU____\n1. Insertion at head\n2. Deletion at head\n3. Insertion at tail\n4. Deletion at tail\n");
+		printf("5. Insertion at a position\n6. Deletion at a position\n7. Insertion before a data\n");
+		printf("8. Deletion before a data\n9. Display\n10.Exit\n");
 		printf("Enter your choice:\n");
 
 		scanf("%d", &choice);
 
 		switch(choice)
 		{
-			case 1: printf("Enter the value to be inserted\n");
+			case 1: printf("Enter the value to be inserted : \n");
 					scanf("%d", &value);
 
 					insertionAtHead(value);
 
 					break;
 
-			case 2: deletetionAtHead();
+			case 2: deletionAtHead();
 
 					break;
 
-			case 3: printf("Enter the value to be inserted\n");
+			case 3: printf("Enter the value to be inserted :\n");
 					scanf("%d", &value);
 
 					insertionAtTail(value);
 
 					break;
 
-			case 4: deletetionAtTail();
+			case 4: deletionAtTail();
 
 					break;
 
-			case 5: printf("Enter the position of the new node:");
+			case 5: printf("Enter the position of the new node : ");
 					scanf("%d", &position);
 
-					printf("Enter the value to be inserted\n");
+					printf("Enter the value to be inserted :\n");
 					scanf("%d", &value);
 
 					insertionAtAPostion(position, value);
 
 					break;
 
-			case 6: deletetionAtAPosition();
+			case 6: deletionAtAPosition(position);
 
 					break;
 
-			case 7: printf("Enter the data of the node before which the new node is to be inserted");
+			case 7: printf("Enter the data of the node before which the new node is to be inserted : ");
 					scanf("%d", &data);
 
 					printf("Enter the value to be inserted\n");
@@ -259,10 +323,10 @@ void main()
 
 					break;
 
-			case 8: printf("Enter the data of the node before which the new node is to be deleted");
+			case 8: printf("Enter the data of the node before which the new node is to be deleted : ");
 					scanf("%d", &data);
 
-					deletetionBeforeAData(data);
+					deletionBeforeAData(data);
 					break;
 
 			case 9: printf("Current status of the list is :\n");
@@ -282,7 +346,7 @@ void main()
 
 	while(header != NULL)
 	{
-		deletetionAtHead();
+		deletionAtHead();
 	}
 
 }
