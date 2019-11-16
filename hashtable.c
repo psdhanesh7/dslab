@@ -1,376 +1,174 @@
 #include<stdio.h>
-
 #include<stdlib.h>
 
- 
+#define hashMax 5
 
-struct data 
-
+typedef  struct node
 {
+	int data;
+	struct node *next;
+} node;
 
-	int key;
+node *hashArray[hashMax];
 
-	int value;
-
-};
-
- 
-
-struct data *array;
-
-int capacity = 10;
-
-int size = 0;
-
- 
-
-/* this function gives a unique hash code to the given key */
-
-int hashcode(int key)
-
+int hashFunction(int n)
 {
+	return n % hashMax;
+}
 
-	return (key % capacity);
+void chaining(int value, int hashCode)
+{
+	node *new;
+
+	new = (node*) malloc(sizeof(node));
+
+	new->data = value;
+	new->next = hashArray[hashCode];
+	hashArray[hashCode] = new;
+}
+
+void deleteFromChain(int n, int hashCode)
+{
+	node *ptr, *pre;
+	ptr = pre = hashArray[hashCode];
+
+	while(ptr->data != n && ptr->next != NULL)
+	{
+		pre = ptr;
+		ptr = ptr->next;
+	}
+
+	if(ptr == hashArray[hashCode])
+	{
+		hashArray[hashCode] = ptr->next;
+		free(ptr);
+	}
+	else if(ptr->data == n)
+	{
+		pre->next = ptr->next;
+		free(ptr);
+	}
 
 }
 
- 
-
-/* it returns prime number just greater than array capacity */
-
-int get_prime(int n)
-
+void deletion(int n)
 {
+	int hashCode;
 
-	if (n % 2 == 0) 
-
-        {
-
-		n++;
-
-	}
-
-	for (; !if_prime(n); n += 2);
-
- 
-
-	return n;
-
+	hashCode = hashFunction(n);
+	deleteFromChain(n, hashCode);
 }
 
- 
-
-/* to check if given input (i.e n) is prime or not */
-
-int if_prime(int n)
-
+void displayLinkedList(node *header)
 {
+	node *ptr = header;
 
-	int i;
-
-	if ( n == 1  ||  n == 0) 
-
-        {
-
-		return 0;
-
-	}
-
-	for (i = 2; i < n; i++) 
-
-        {
-
-		if (n % i == 0) 
-
-                {
-
-			return 0;
-
+	if(header == NULL)
+		return;
+	else
+	{
+		while(ptr != NULL)
+		{
+			printf("%d\t", ptr->data);
+			ptr = ptr->next;
 		}
-
 	}
+}
 
-	return 1;
+
+void displayHashTable()
+{
+	for(int i = 0; i < hashMax; i++)
+	{
+		displayLinkedList(hashArray[i]);  //Display each chain
+	}
+}
+
+void insertion(int n)
+{
+	int hashCode;
+
+	hashCode = hashFunction(n);
+
+	chaining(n, hashCode);
 
 }
 
- 
-
-void init_array()
-
+node* deleteHead(node *header)
 {
+	if(header == NULL)
 
-	int i;
-
-	capacity = get_prime(capacity);
-
-	array = (struct data*) malloc(capacity * sizeof(struct data));
-
-	for (i = 0; i < capacity; i++) 
-
-        {
-
-		array[i].key = 0;
-
-		array[i].value = 0;
-
-	}
-
-}
-
- 
-
-/* to insert a key in the hash table */
-
-void insert(int key)
-
-{
-
-	int index = hashcode(key);
-
-	if (array[index].value == 0) 
-
-        {
-
-		/*  key not present, insert it  */
-
-		array[index].key = key;
-
-		array[index].value = 1;
-
-		size++;
-
-		printf("\n Key (%d) has been inserted \n", key);
-
-	}
-
-	else if(array[index].key == key) 
-
-        {
-
-		/*  updating already existing key  */
-
-		printf("\n Key (%d) already present, hence updating its value \n", key);
-
-		array[index].value += 1;
-
-	}
+		return header;
 
 	else
+	{
+		node *ptr;
 
-        {
+		ptr = header;
+		header = header->next;
+		free(ptr);
 
-		/*  key cannot be insert as the index is already containing some other key  */
-
-		printf("\n ELEMENT CANNOT BE INSERTED \n");
-
+		return header;
 	}
-
 }
 
- 
-
-/* to remove a key from hash table */
-
-void remove_element(int key)
-
+void clearChain(node *header)
 {
-
-	int index  = hashcode(key);
-
-	if(array[index].value == 0)
-
-        {
-
-		printf("\n This key does not exist \n");
-
-	}
-
-	else {
-
-		array[index].key = 0;
-
-		array[index].value = 0;
-
-		size--;
-
-		printf("\n Key (%d) has been removed \n", key);
-
-	}
-
+	while(header != NULL)
+	{
+		header = deleteHead(header);
+	}	
 }
 
- 
-
-/* to display all the elements of a hash table */
-
-void display()
-
+void clearHashTable()
 {
-
-	int i;
-
-	for (i = 0; i < capacity; i++)
-
-        {
-
-		if (array[i].value == 0)
-
-                {
-
-			printf("\n Array[%d] has no elements \n");
-
-		}
-
-		else 
-
-                {
-
-			printf("\n array[%d] has elements -:\n key(%d) and value(%d) \t", i, array[i].key, array[i].value);
-
-		}
-
+	for(int i = 0; i < hashMax; i++)
+	{
+		clearChain(hashArray[i]);
 	}
-
 }
-
- 
-
-int size_of_hashtable()
-
-{
-
-	return size;
-
-}
-
- 
 
 void main()
-
 {
+	int n, hashCode, a = 1, choice;
 
-	int choice, key, value, n, c;
+	for(int i = 0; i < hashMax; ++i)
+	{
+		hashArray[i] = NULL;
+	}
 
-	clrscr();
-
- 
-
-	init_array();
-
- 
-
-	do {
-
-		printf("\n Implementation of Hash Table in C \n\n");
-
-		printf("MENU-:  \n1.Inserting item in the Hash Table" 
-
-                               "\n2.Removing item from the Hash Table"
-
-		               "\n3.Check the size of Hash Table" 
-
-                               "\n4.Display a Hash Table"
-
-		       "\n\n Please enter your choice -:");
-
- 
-
+	while(a)
+	{
+		printf("\n___MENU___\n1.Insertion\n2.Deletion\n3.Display\n4.Exit\nEnter your choice : ");
 		scanf("%d", &choice);
 
- 
+		switch(choice)
+		{
+			case 1 : printf("Enter the number to be inserted : ");
+					 scanf("%d", &n);
 
-		switch(choice) 
+					 insertion(n);
+					 break;
 
-                {
+			case 2 : printf("Enter the number to be deleted : ");
+			 		 scanf("%d", &n);
 
- 
+					 deletion(n);
+					 break;
 
-		case 1:
+			case 3 : printf("Current status of HashTable is : \n");
 
- 
+					 displayHashTable();
+					 break;
 
-		      printf("Inserting element in Hash Table\n");
+			case 4 : a = 0;
+					 break;
 
-		      printf("Enter key -:\t");
-
-		      scanf("%d", &key);
-
-		      insert(key);
-
- 
-
-		      break;
-
- 
-
-		case 2:
-
- 
-
-		      printf("Deleting in Hash Table \n Enter the key to delete-:");
-
-		      scanf("%d", &key);
-
-		      remove_element(key);
-
- 
-
-		      break;
-
- 
-
-		case 3:
-
- 
-
-		      n = size_of_hashtable();
-
-		      printf("Size of Hash Table is-:%d\n", n);
-
- 
-
-		      break;
-
- 
-
-		case 4:
-
- 
-
-		      display();
-
- 
-
-		      break;
-
- 
-
-		default:
-
- 
-
-		       printf("Wrong Input\n");
-
- 
+			default : printf("Invalid Input!!");
 
 		}
+	}
 
- 
-
-		printf("\n Do you want to continue-:(press 1 for yes)\t");
-
-		scanf("%d", &c);
-
- 
-
-	}while(c == 1);
-
- 
-
-	getch();
-
- 
+	clearHashTable();
 
 }
-
